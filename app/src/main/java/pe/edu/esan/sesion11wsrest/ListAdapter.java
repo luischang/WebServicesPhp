@@ -23,7 +23,6 @@ public class ListAdapter extends ArrayAdapter<Usuario> {
         super(context, R.layout.item_usuario, lista);
         listado = lista;
     }
-
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -39,6 +38,4 @@ public class ListAdapter extends ArrayAdapter<Usuario> {
 
         return view;
     }
-
-
 }

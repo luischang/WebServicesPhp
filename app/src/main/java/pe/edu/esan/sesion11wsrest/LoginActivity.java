@@ -38,26 +38,19 @@ public class LoginActivity extends AppCompatActivity {
         final EditText txtClave = findViewById(R.id.txtClave);
         final CheckBox chkRecordarme = findViewById(R.id.chkRecordarme);
 
-
         btnIngresar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 final String correo = txtCorreo.getText().toString();
                 final String clave = txtClave.getText().toString();
-
                 RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-
-                //final int SIMPLE_REQUEST = 1;
                 String url = "http://www.kreapps.biz/esan/validar.php";
                 JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, "COR=" + correo + "&PWD=" + clave, new Response.Listener<JSONObject>() {
                     String valCor = "";
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        //Procesar JSONObject
-                        Toast.makeText(getApplicationContext(), response.toString(), Toast.LENGTH_LONG).show();
-
                         try {
                             JSONArray jsonArray = response.getJSONArray("loginresult");
                             for (int i = 0; i < jsonArray.length(); i++) {
@@ -77,21 +70,14 @@ public class LoginActivity extends AppCompatActivity {
                                         editor.remove(KEY_CHECK);
                                     }
                                     editor.apply();
-                                    //Se llena el objeto USUARIO con una �na instancia
-                                    // Usuario usuario = new Usuario(correo, clave);
-                                    //ControlUsuario.getInstance().current_usuario = usuario;
 
                                     Intent intent = new Intent().setClass(getApplicationContext(), MainActivity.class);
                                     startActivity(intent);
                                 } else {
                                     Toast.makeText(getApplicationContext(), "Correo o Clave incorrecta", Toast.LENGTH_LONG).show();
                                 }
-
-                                //Toast.makeText(getApplicationContext(), correo, Toast.LENGTH_LONG).show();
-                                //Toast.makeText(getApplicationContext(), nombre, Toast.LENGTH_LONG).show();
                             }
                         } catch (JSONException error) {
-
 
                         }
                     }
@@ -107,14 +93,11 @@ public class LoginActivity extends AppCompatActivity {
                         return "application/x-www-form-urlencoded; charset=UTF-8";
                     }
                 };
-
-                //request.setTag(SIMPLE_REQUEST);
+                //Se agrega a la cola de peticiones
                 requestQueue.add(request);
-
-
             }
         });
-
+        //Se agregan las preferencias compartidas (Modo Privado)-->Al crear son vacías
         SharedPreferences setting = getSharedPreferences(KEY_PREFERENCES, MODE_PRIVATE);
         String pf_correo = setting.getString(KEY_EMAIL, "");
         String pf_clave = setting.getString(KEY_PWD, "");

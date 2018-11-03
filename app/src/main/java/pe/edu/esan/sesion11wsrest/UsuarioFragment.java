@@ -41,7 +41,6 @@ public class UsuarioFragment extends Fragment {
     Button btnNotificar;
     ListView lsvUsuario;
 
-
     public UsuarioFragment() {
         // Required empty public constructor
     }
@@ -62,7 +61,7 @@ public class UsuarioFragment extends Fragment {
         btnGrabar.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GrabarUsuario(txtCorreoF.getText().toString(), txtClaveF.getText().toString(),txtNombreCompletoF.getText().toString());
+                GrabarUsuario(txtCorreoF.getText().toString(), txtClaveF.getText().toString(), txtNombreCompletoF.getText().toString());
                 CargarUsuario();
             }
         });
@@ -71,27 +70,21 @@ public class UsuarioFragment extends Fragment {
         return view;
     }
 
-    private void GrabarUsuario(String correo, String clave, String nombreCompleto){
+    private void GrabarUsuario(String correo, String clave, String nombreCompleto) {
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
-
-        final int SIMPLE_REQUEST = 1;
         String url = "http://www.kreapps.biz/esan/grabar.php";
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, url, "CORREO=" + correo+ "&CLAVE="+clave + "&NOMBRECOMPLETO="+nombreCompleto, new Response.Listener<JSONArray>() {
-            String valCor = "";
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, url, "CORREO=" + correo + "&CLAVE=" + clave + "&NOMBRECOMPLETO=" + nombreCompleto,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            Toast.makeText(getActivity().getApplicationContext(), "SE REGISTRO EXITOSAMENTE", Toast.LENGTH_LONG).show();
 
-            @Override
-            public void onResponse(JSONArray response) {
-                //Procesar JSONObject
-                //Toast.makeText(getActivity().getApplicationContext(), response.toString(), Toast.LENGTH_LONG).show();
-
-                try {
-                    Toast.makeText(getActivity().getApplicationContext(), "SE REGISTRO EXITOSAMENTE", Toast.LENGTH_LONG).show();
-
-                } catch (Error error) {
-                    Toast.makeText(getActivity().getApplicationContext(), error.toString(), Toast.LENGTH_LONG).show();
-                }
-            }
-        }, new Response.ErrorListener() {
+                        } catch (Error error) {
+                            Toast.makeText(getActivity().getApplicationContext(), error.toString(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 //Procesar VolleyError
@@ -103,27 +96,17 @@ public class UsuarioFragment extends Fragment {
                 return "application/x-www-form-urlencoded; charset=UTF-8";
             }
         };
-
-        //request.setTag(SIMPLE_REQUEST);
+        //Se agrega a la cola de peticiones
         requestQueue.add(request);
-
-
-
     }
 
     private void CargarUsuario() {
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
-
-        final int SIMPLE_REQUEST = 1;
         String url = "http://www.kreapps.biz/esan/usuario.php";
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, url, "ID=-1", new Response.Listener<JSONArray>() {
-            String valCor = "";
 
             @Override
             public void onResponse(JSONArray response) {
-                //Procesar JSONObject
-                Toast.makeText(getActivity().getApplicationContext(), response.toString(), Toast.LENGTH_LONG).show();
-
                 try {
                     List<Usuario> listadoUsuario = new ArrayList<>();
                     for (int i = 0; i < response.length(); i++) {
@@ -135,7 +118,6 @@ public class UsuarioFragment extends Fragment {
                     }
                     ListAdapter listAdapter = new ListAdapter(getActivity().getBaseContext(), listadoUsuario);
                     lsvUsuario.setAdapter(listAdapter);
-
                 } catch (JSONException error) {
                     Toast.makeText(getActivity().getApplicationContext(), error.toString(), Toast.LENGTH_LONG).show();
                 }
@@ -152,8 +134,6 @@ public class UsuarioFragment extends Fragment {
                 return "application/x-www-form-urlencoded; charset=UTF-8";
             }
         };
-
-        //request.setTag(SIMPLE_REQUEST);
         requestQueue.add(request);
     }
 
